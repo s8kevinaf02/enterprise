@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Enterprises | Business Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom styles */
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+        .testimonial-card:hover {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .newsletter-bg {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">Nexus Enterprises</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="#" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
+                        <a href="#services" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Services</a>
+                        <a href="#about" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">About</a>
+                        <a href="#contact" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out transform hover:-translate-y-1">Get Started</button>
+                </div>
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                        <span class="sr-only">Open main menu</span>
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="sm:hidden hidden">
+            <div class="pt-2 pb-4 space-y-1">
+                <a href="#" class="bg-blue-50 border-blue-500 text-blue-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
+                <a href="#services" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Services</a>
+                <a href="#about" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">About</a>
+                <a href="#contact" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Contact</a>
+                <div class="mt-4 pl-3 pr-4">
+                    <button class="w-full flex justify-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-gradient text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight">Transforming Businesses with Innovative Solutions</h1>
+                    <p class="text-xl text-blue-100">We help enterprises achieve digital transformation with cutting-edge technology and strategic consulting.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button class="bg-white text-blue-700 hover:bg-gray-100 font-medium px-6 py-3 rounded-lg transition duration-300">Get Started</button>
+                        <button class="border-2 border-white text-white hover:bg-white hover:text-blue-600 font-medium px-6 py-3 rounded-lg transition duration-300">Learn More</button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="relative z-10 bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-8 shadow-xl">
+                        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Business solutions" class="rounded-lg shadow-lg w-full h-auto">
+                    </div>
+                    <div class="absolute -bottom-4 -left-4 w-full h-full border-2 border-white rounded-xl"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Clients -->
+    <div class="bg-gray-50 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-center text-gray-400 text-sm font-semibold uppercase tracking-wide mb-8">Trusted by leading companies</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 items-center">
+                <div class="flex justify-center">
+                    <i class="fab fa-google text-4xl text-gray-400 hover:text-blue-600 transition duration-300"></i>
+                </div>
+                <div class="flex justify-center">
+                    <i class="fab fa-microsoft text-4xl text-gray-400 hover:text-blue-600 transition duration-300"></i>
+                </div>
+                <div class="flex justify-center">
+                    <i class="fab fa-apple text-4xl text-gray-400 hover:text-blue-600 transition duration-300"></i>
+                </div>
+                <div class="flex justify-center">
+                    <i class="fab fa-amazon text-4xl text-gray-400 hover:text-blue-600 transition duration-300"></i>
+                </div>
+                <div class="flex justify-center">
+                    <i class="fab fa-spotify text-4xl text-gray-400 hover:text-blue-600 transition duration-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <div id="services" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-blue-600 text-sm font-semibold tracking-wide uppercase">Our Services</span>
+                <h2 class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">Comprehensive business solutions</h2>
+                <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">We provide end-to-end solutions to help your business grow in the digital age.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="feature-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                                <i class="fas fa-chart-pie text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">Business Analytics</h3>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-500">Leverage data-driven insights to make informed business decisions and gain competitive advantage.</p>
+                        <div class="mt-6">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">Learn more <i class="fas fa-arrow-right ml-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="feature-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                                <i class="fas fa-cloud text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">Cloud Solutions</h3>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-500">Migrate to the cloud with our secure, scalable, and reliable infrastructure solutions for all business sizes.</p>
+                        <div class="mt-6">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">Learn more <i class="fas fa-arrow-right ml-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="feature-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                                <i class="fas fa-lock text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">Security Services</h3>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-500">Comprehensive security solutions to protect your digital assets and ensure compliance with regulations.</p>
+                        <div class="mt-6">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">Learn more <i class="fas fa-arrow-right ml-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional services -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 4 -->
+                <div class="feature-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
+                                <i class="fas fa-code text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">Custom Software</h3>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-500">Tailored software solutions designed specifically for your business needs and processes.</p>
+                        <div class="mt-6">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">Learn more <i class="fas fa-arrow-right ml-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="feature-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-red-500 rounded-md p-3">
+                                <i class="fas fa-users text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">Consulting</h3>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-500">Strategic consulting services to optimize operations and maximize business performance.</p>
+                        <div class="mt-6">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">Learn more <i class="fas fa-arrow-right ml-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="feature-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 ease-in-out">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                                <i class="fas fa-headset text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-bold text-gray-900">24/7 Support</h3>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-500">Round-the-clock technical support to ensure your business operations run smoothly.</p>
+                        <div class="mt-6">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">Learn more <i class="fas fa-arrow-right ml-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="bg-blue-700 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                <div class="p-6">
+                    <p class="text-4xl font-bold">120+</p>
+                    <p class="text-blue-100 mt-2">Global Clients</p>
+                </div>
+                <div class="p-6">
+                    <p class="text-4xl font-bold">15</p>
+                    <p class="text-blue-100 mt-2">Years Experience</p>
+                </div>
+                <div class="p-6">
+                    <p class="text-4xl font-bold">98%</p>
+                    <p class="text-blue-100 mt-2">Customer Satisfaction</p>
+                </div>
+                <div class="p-6">
+                    <p class="text-4xl font-bold">50+</p>
+                    <p class="text-blue-100 mt-2">Industry Awards</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Our team" class="rounded-lg shadow-xl w-full h-auto">
+                </div>
+                <div>
+                    <span class="text-blue-600 text-sm font-semibold tracking-wide uppercase">About Us</span>
+                    <h2 class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">Innovating since 2008</h2>
+                    <p class="mt-3 text-lg text-gray-500">Nexus Enterprises was founded with a vision to bridge the gap between business needs and technological solutions.</p>
+                    
+                    <div class="mt-8 space-y-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                                    <i class="fas fa-lightbulb"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Our Vision</h3>
+                                <p class="mt-2 text-gray-500">To be the leading provider of innovative business solutions that transform industries.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                                    <i class="fas fa-bullseye"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Our Mission</h3>
+                                <p class="mt-2 text-gray-500">Deliver measurable results through strategic technology implementations and business consulting.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Our Values</h3>
+                                <p class="mt-2 text-gray-500">Integrity, Innovation, Customer Focus, and Excellence in everything we do.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-blue-600 text-sm font-semibold tracking-wide uppercase">Testimonials</span>
+                <h2 class="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">What our clients say</h2>
+                <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">We measure our success by the success of our clients.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-2 rounded-full">
+                            <i class="fas fa-quote-left text-blue-600"></i>
+                        </div>
+                        <div class="ml-3 text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"Nexus helped us streamline our operations and increased our productivity by 40%. Their team was professional and delivered beyond our expectations."</p>
+                    <div class="flex items-center">
+                        <div class="h-12 w-12 rounded-full bg-gray-300 overflow-hidden">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sarah Johnson" class="h-full w-full object-cover">
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-medium text-gray-900">Sarah Johnson</h4>
+                            <p class="text-gray-500">CEO, TechSolutions Inc.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-2 rounded-full">
+                            <i class="fas fa-quote-left text-blue-600"></i>
+                        </div>
+                        <div class="ml-3 text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"The migration to cloud services was seamless with Nexus. Their 24/7 support has been invaluable to our business continuity."</p>
+                    <div class="flex items-center">
+                        <div class="h-12 w-12 rounded-full bg-gray-300 overflow-hidden">
+                            <img src="https://randomuser.me/api/portraits/men/46.jpg" alt="Michael Chen" class="h-full w-full object-cover">
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-medium text-gray-900">Michael Chen</h4>
+                            <p class="text-gray-500">CTO, Global Retail Corp</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-2 rounded-full">
+                            <i class="fas fa-quote-left text-blue-600"></i>
+                        </div>
+                        <div class="ml-3 text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"Their custom software solution transformed our workflow. The team was responsive to our changing needs throughout the project."</p>
+                    <div class="flex items-center">
+                        <div class="h-12 w-12 rounded-full bg-gray-300 overflow-hidden">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Jennifer Lee" class="h-full w-full object-cover">
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-medium text-gray-900">Jennifer Lee</h4>
+                            <p class="text-gray-500">Operations Director, Finova Group</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="newsletter-bg text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold sm:text-4xl">Ready to transform your business?</h2>
+                <p class="mt-3 max-w-2xl mx-auto text-xl">Subscribe to our newsletter for insights and offers.</p>
+                
+                <div class="mt-8 max-w-lg mx-auto">
+                    <form class="sm:flex">
+                        <label for="email" class="sr-only">Email address</label>
+                        <input id="email" name="email" type="email" autocomplete="email" required class="w-full px-5 py-3 placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 focus:outline-none rounded-md text-gray-900" placeholder="Enter your email">
+                        <button type="submit" class="mt-3 w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white sm:mt-0 sm:ml-3 sm:w-auto sm:flex-shrink-0 transition duration-300">Subscribe</button>
+                    </form>
+                    <p class="mt-3 text-sm text-blue-100">We respect your privacy. Unsubscribe at any time.</p>
+                </div>
+                
+                <div class="mt-12">
+                    <a href="#" class="px-8 py-4 border border-transparent text-base font-medium rounded-md text-blue-700 bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10 transition duration-300">
+                        Schedule a Consultation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-8">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-gray-900">Get in touch</h2>
+                    <p class="mt-3 text-lg text-gray-500">Have questions or want to discuss your project? Reach out to our team.</p>
+                    
+                    <div class="mt-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Location</h3>
+                                <p class="mt-2 text-gray-500">123 Enterprise Avenue<br>Silicon Valley, CA 94000</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-phone-alt text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Phone</h3>
+                                <p class="mt-2 text-gray-500">+1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-envelope text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Email</h3>
+                                <p class="mt-2 text-gray-500">info@nexusenterprises.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 lg:mt-0">
+                    <div class="bg-white shadow-xl rounded-lg p-8">
+                        <h3 class="text-lg font-bold text-gray-900 mb-6">Send us a message</h3>
+                        <form class="space-y-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                                <div class="mt-1">
+                                    <input type="text" name="name" id="name" class="py-3 px-4 block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                <div class="mt-1">
+                                    <input type="email" name="email" id="email" class="py-3 px-4 block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                                <div class="mt-1">
+                                    <input type="tel" name="phone" id="phone" class="py-3 px-4 block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                                <div class="mt-1">
+                                    <textarea id="message" name="message" rows="4" class="py-3 px-4 block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 transform hover:-translate-y-1">
+                                    Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+                <div class="col-span-2">
+                    <div class="flex items-center">
+                        <i class="fas fa-chart-line text-blue-400 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-white">Nexus Enterprises</span>
+                    </div>
+                    <p class="mt-4 text-gray-300">Transforming businesses with innovative technology solutions since 2008.</p>
+                    <div class="mt-6 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <span class="sr-only">Facebook</span>
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <span class="sr-only">Twitter</span>
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <span class="sr-only">LinkedIn</span>
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <span class="sr-only">YouTube</span>
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Solutions</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Business Analytics</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Cloud Services</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Security</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Custom Software</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Support</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Pricing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Documentation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Guides</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">API Status</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">Company</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-gray-400 hover:text-white">About</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between">
+                <p class="text-gray-400 text-sm">© 2023 Nexus Enterprises. All rights reserved.</p>
+                <div class="mt-4 md:mt-0 space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to top button -->
+    <button id="back-to-top" class="hidden fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('hidden');
+            } else {
+                backToTopButton.classList.add('hidden');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Close mobile menu if open
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Form submission
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Here you would normally send the form data to your server
+                // For demo purposes, we'll just show an alert
+                alert('Thank you for your message! We will get back to you soon.');
+                form.reset();
+            });
+        });
+    </script>
+</body>
+</html>
