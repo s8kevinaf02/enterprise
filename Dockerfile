@@ -8,7 +8,7 @@ RUN apt-get update && \
 
 # Set working directory and copy app files
 WORKDIR /var/www/html
-COPY app/index.html ./index.html
+COPY website-enterprise.html ./index.html
     
 
 # Expose Apache's default port
