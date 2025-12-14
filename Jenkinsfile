@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_USERNAME = "s8kevinaf02"
-        ALPHA_APPLICATION_01_REPO = "enterprise-App-01"
+        ALPHA_APPLICATION_01_REPO = "enterprise-app-01"
     }
 
     parameters {
