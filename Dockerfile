@@ -8,10 +8,12 @@ RUN apt-get update && \
 
 # Set working directory and copy app files
 WORKDIR /var/www/html
-COPY ./app .
+COPY app/index.html ./index.html
+    
 
 # Expose Apache's default port
 EXPOSE 80
 
 # Start Apache in foreground
 CMD ["apache2ctl", "-D", "FOREGROUND"]
+
