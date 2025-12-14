@@ -37,13 +37,13 @@ pipeline {
                 script {
                     if (isUnix()) {
                         sh """
-                            docker rm -f ${params.CONTAINER_NAME} || true
-                            docker run -d -p ${params.PORT_ON_DOCKER_HOST_01}:80 --name ${params.CONTAINER_NAME} ${image}
+                            docker build -t ${DOCKER_HUB_USERNAME}/${ALPHA_APPLICATION_01_REPO}:${params.APP1_TAG} .
+                            docker images | grep ${params.APP1_TAG}
                         """
                     } else {
                         bat """
-                            docker rm -f %CONTAINER_NAME% 2>nul
-                            docker run -d -p %PORT_ON_DOCKER_HOST_01%:80 --name %CONTAINER_NAME% ${image}
+                            docker build -t ${DOCKER_HUB_USERNAME}/${ALPHA_APPLICATION_01_REPO}:${params.APP1_TAG} .
+                            docker images | findstr ${params.APP1_TAG}
                         """
                     }
                 }
