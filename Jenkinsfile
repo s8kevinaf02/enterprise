@@ -3,14 +3,14 @@ pipeline {
 
     environment {
         DOCKER_HUB_USERNAME = "s8kevinaf02"
-        ALPHA_APPLICATION_01_REPO = "Enterprise-App-01"
+        ALPHA_APPLICATION_01_REPO = "enterprise-App-01"
     }
 
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: '')
         string(name: 'APP1_TAG', defaultValue: 'app1.1.0', description: '')
         string(name: 'PORT_ON_DOCKER_HOST_01', defaultValue: '3000', description: '')
-        string(name: 'CONTAINER_NAME', defaultValue: 'Enterprise-App-01', description: '')
+        string(name: 'CONTAINER_NAME', defaultValue: 'enterprise-App-01', description: '')
     }
 
     stages {
