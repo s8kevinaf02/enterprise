@@ -72,7 +72,7 @@ pipeline {
               aws ecr describe-repositories --repository-names ${repo} --region %AWS_REGION% >nul 2>nul
               if errorlevel 1 aws ecr create-repository --repository-name ${repo} --region %AWS_REGION%
 
-              echo ==== LOGIN ECR ====
+              echo ==== LOGIN TO ECR ====
               aws ecr get-login-password --region %AWS_REGION% > ecr_pw.txt
               type ecr_pw.txt | docker login --username AWS --password-stdin %ECR%
               del ecr_pw.txt
@@ -104,19 +104,20 @@ pipeline {
             for /F "tokens=1,2 delims==" %%A in (image.env) do set %%A=%%B
             echo Deploying %ECR_IMAGE%
 
-            echo ==== KUBECONFIG ====
+            echo ==== PREPARE KUBECONFIG ====
             if not exist "%WORKSPACE%\\.kube" mkdir "%WORKSPACE%\\.kube"
-            set KUBECONFIG=%WORKSPACE%\\.kube\\config
+            set "KCFG=%WORKSPACE%\\.kube\\config"
 
-            aws eks update-kubeconfig --region %AWS_REGION% --name %CLUSTER_NAME% --kubeconfig "%KUBECONFIG%"
+            echo ==== UPDATE KUBECONFIG ====
+            aws eks update-kubeconfig --region %AWS_REGION% --name %CLUSTER_NAME% --kubeconfig "%KCFG%"
 
-            echo ==== DEPLOY ====
-            powershell -NoProfile -Command "(Get-Content 'k8s\\deployment.yaml') -replace 'IMAGE_PLACEHOLDER','%ECR_IMAGE%' | kubectl --kubeconfig '%KUBECONFIG%' apply -f -"
-            kubectl --kubeconfig "%KUBECONFIG%" apply -f k8s\\service.yaml
+            echo ==== DEPLOY TO K8S ====
+            powershell -NoProfile -Command "$env:KUBECONFIG='%KCFG%'; (Get-Content 'k8s\\deployment.yaml') -replace 'IMAGE_PLACEHOLDER','%ECR_IMAGE%' | kubectl apply -f -"
+            cmd /V /C "set KUBECONFIG=%KCFG%&& kubectl apply -f k8s\\service.yaml"
 
-            echo ==== ROLLOUT ====
-            kubectl --kubeconfig "%KUBECONFIG%" rollout status deployment/enterprise-web
-            kubectl --kubeconfig "%KUBECONFIG%" get svc enterprise-web-svc -o wide
+            echo ==== ROLLOUT STATUS ====
+            cmd /V /C "set KUBECONFIG=%KCFG%&& kubectl rollout status deployment/enterprise-web"
+            cmd /V /C "set KUBECONFIG=%KCFG%&& kubectl get svc enterprise-web-svc -o wide"
           '''
         }
       }
