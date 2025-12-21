@@ -88,6 +88,16 @@ pipeline {
       }
     }
 
+    stage('Debug kubectl path') {
+        steps {
+             bat '''
+                echo ==== WHERE KUBECTL ====
+                where kubectl
+            '''
+         }
+    }
+
+
     stage('Deploy to EKS') {
       steps {
         withCredentials([
