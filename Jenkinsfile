@@ -25,11 +25,11 @@ pipeline {
 
     stage('Sanity: tools') {
       steps {
-        bat """
+        bat '''
           aws --version
           docker version
           kubectl version --client
-        """
+        '''
       }
     }
 
@@ -38,10 +38,7 @@ pipeline {
         script {
           def repo = env.ECR_REPO.toLowerCase()
           def localImage = "${repo}:${params.APP_TAG}"
-
-          bat """
-            docker build -t ${localImage} .
-          """
+          bat "docker build -t ${localImage} ."
         }
       }
     }
@@ -71,8 +68,10 @@ pipeline {
               aws ecr describe-repositories --repository-names ${repo} --region %AWS_REGION% >nul 2>nul
               if errorlevel 1 aws ecr create-repository --repository-name ${repo} --region %AWS_REGION%
 
-              echo ==== LOGIN TO ECR ====
-              powershell -NoProfile -Command "$$pw = (aws ecr get-login-password --region %AWS_REGION%); docker login --username AWS --password $$pw %ECR%"
+              echo ==== LOGIN TO ECR (no PowerShell $ vars) ====
+              aws ecr get-login-password --region %AWS_REGION% > ecr_pw.txt
+              type ecr_pw.txt | docker login --username AWS --password-stdin %ECR%
+              del ecr_pw.txt
 
               echo ==== TAG & PUSH IMAGE ====
               docker tag ${localImage} %ECR%/${repo}:${params.APP_TAG}
@@ -91,26 +90,28 @@ pipeline {
           string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
           string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
         ]) {
-          bat """
-            set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
-            set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
-            set AWS_REGION=%AWS_REGION%
+          script {
+            bat '''
+              set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
+              set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
+              set AWS_REGION=%AWS_REGION%
 
-            if not exist "%WORKSPACE%\\.kube" mkdir "%WORKSPACE%\\.kube"
-            set KUBECONFIG=%WORKSPACE%\\.kube\\config
+              if not exist "%WORKSPACE%\\.kube" mkdir "%WORKSPACE%\\.kube"
+              set KUBECONFIG=%WORKSPACE%\\.kube\\config
 
-            for /f "tokens=1,2 delims==" %%A in (image.env) do set %%A=%%B
+              for /f "tokens=1,2 delims==" %%A in (image.env) do set %%A=%%B
 
-            echo ==== UPDATE KUBECONFIG ====
-            aws eks update-kubeconfig --region %AWS_REGION% --name %CLUSTER_NAME% --kubeconfig "%KUBECONFIG%"
+              echo ==== UPDATE KUBECONFIG ====
+              aws eks update-kubeconfig --region %AWS_REGION% --name %CLUSTER_NAME% --kubeconfig "%KUBECONFIG%"
 
-            echo ==== DEPLOY TO EKS ====
-            powershell -NoProfile -Command "(Get-Content k8s\\deployment.yaml) -replace 'IMAGE_PLACEHOLDER','%ECR_IMAGE%' | kubectl apply -f -"
-            kubectl apply -f k8s\\service.yaml
+              echo ==== APPLY MANIFESTS ====
+              powershell -NoProfile -Command "(Get-Content k8s\\deployment.yaml) -replace ''IMAGE_PLACEHOLDER'',''%ECR_IMAGE%'' | kubectl apply -f -"
+              kubectl apply -f k8s\\service.yaml
 
-            kubectl rollout status deployment/enterprise-web
-            kubectl get svc enterprise-web-svc -o wide
-          """
+              kubectl rollout status deployment/enterprise-web
+              kubectl get svc enterprise-web-svc -o wide
+            '''
+          }
         }
       }
     }
