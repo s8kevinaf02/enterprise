@@ -29,7 +29,7 @@ pipeline {
           echo ==== TOOLS CHECK ====
           aws --version
           docker version
-          kubectl version --client
+          "C:\\Program Files\\Docker\\Docker\\resources\\bin\\kubectl.exe" version --client
         '''
       }
     }
@@ -63,6 +63,7 @@ pipeline {
               set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
               set AWS_REGION=%AWS_REGION%
 
+              echo ==== WHOAMI ====
               aws sts get-caller-identity
 
               for /F "delims=" %%A in ('aws sts get-caller-identity --query Account --output text') do set ACCOUNT_ID=%%A
@@ -88,16 +89,6 @@ pipeline {
       }
     }
 
-    stage('Debug kubectl path') {
-        steps {
-             bat '''
-                echo ==== WHERE KUBECTL ====
-                where kubectl
-            '''
-         }
-    }
-
-
     stage('Deploy to EKS') {
       steps {
         withCredentials([
@@ -108,7 +99,7 @@ pipeline {
             echo ==== AWS CREDS ====
             set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
             set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
-            set AWS_REGION=%AWS_REGION%
+            set AWS_REGION=eu-west-2
 
             echo ==== LOAD IMAGE ====
             for /F "tokens=1,2 delims==" %%A in (image.env) do set %%A=%%B
@@ -116,18 +107,21 @@ pipeline {
 
             echo ==== PREPARE KUBECONFIG ====
             if not exist "%WORKSPACE%\\.kube" mkdir "%WORKSPACE%\\.kube"
-            set "KCFG=%WORKSPACE%\\.kube\\config"
+            set KCFG=%WORKSPACE%\\.kube\\config
 
             echo ==== UPDATE KUBECONFIG ====
-            aws eks update-kubeconfig --region %AWS_REGION% --name %CLUSTER_NAME% --kubeconfig "%KCFG%"
+            aws eks update-kubeconfig --region %AWS_REGION% --name enterprise-eks --kubeconfig "%KCFG%"
 
-            echo ==== DEPLOY TO K8S ====
-            powershell -NoProfile -Command "$env:KUBECONFIG='%KCFG%'; (Get-Content 'k8s\\deployment.yaml') -replace 'IMAGE_PLACEHOLDER','%ECR_IMAGE%' | kubectl apply -f -"
-            cmd /V /C "set KUBECONFIG=%KCFG%&& kubectl apply -f k8s\\service.yaml"
+            echo ==== RENDER DEPLOYMENT YAML ====
+            powershell -NoProfile -Command "(Get-Content 'k8s\\deployment.yaml') -replace 'IMAGE_PLACEHOLDER','%ECR_IMAGE%' | Set-Content 'k8s\\deployment.rendered.yaml'"
+
+            echo ==== APPLY MANIFESTS (DIRECT kubectl.exe) ====
+            "C:\\Program Files\\Docker\\Docker\\resources\\bin\\kubectl.exe" --kubeconfig "%KCFG%" apply -f k8s\\deployment.rendered.yaml
+            "C:\\Program Files\\Docker\\Docker\\resources\\bin\\kubectl.exe" --kubeconfig "%KCFG%" apply -f k8s\\service.yaml
 
             echo ==== ROLLOUT STATUS ====
-            cmd /V /C "set KUBECONFIG=%KCFG%&& kubectl rollout status deployment/enterprise-web"
-            cmd /V /C "set KUBECONFIG=%KCFG%&& kubectl get svc enterprise-web-svc -o wide"
+            "C:\\Program Files\\Docker\\Docker\\resources\\bin\\kubectl.exe" --kubeconfig "%KCFG%" rollout status deployment/enterprise-web
+            "C:\\Program Files\\Docker\\Docker\\resources\\bin\\kubectl.exe" --kubeconfig "%KCFG%" get svc enterprise-web-svc -o wide
           '''
         }
       }
