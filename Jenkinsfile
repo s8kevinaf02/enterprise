@@ -16,8 +16,11 @@ pipeline {
   }
 
   stages {
+
     stage('Checkout') {
-      steps { checkout scm }
+      steps {
+        checkout scm
+      }
     }
 
     stage('Sanity: tools') {
@@ -33,9 +36,12 @@ pipeline {
     stage('Build Docker image') {
       steps {
         script {
-          def repo = "${env.ECR_REPO}".toLowerCase()
+          def repo = env.ECR_REPO.toLowerCase()
           def localImage = "${repo}:${params.APP_TAG}"
-          bat "docker build -t ${localImage} ."
+
+          bat """
+            docker build -t ${localImage} .
+          """
         }
       }
     }
@@ -47,7 +53,7 @@ pipeline {
           string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
         ]) {
           script {
-            def repo = "${env.ECR_REPO}".toLowerCase()
+            def repo = env.ECR_REPO.toLowerCase()
             def localImage = "${repo}:${params.APP_TAG}"
 
             bat """
@@ -55,16 +61,20 @@ pipeline {
               set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
               set AWS_REGION=%AWS_REGION%
 
+              echo ==== AWS IDENTITY ====
               aws sts get-caller-identity
 
               for /f "delims=" %%A in ('aws sts get-caller-identity --query Account --output text') do set ACCOUNT_ID=%%A
               set ECR=%ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com
 
+              echo ==== ENSURE ECR REPO ====
               aws ecr describe-repositories --repository-names ${repo} --region %AWS_REGION% >nul 2>nul
               if errorlevel 1 aws ecr create-repository --repository-name ${repo} --region %AWS_REGION%
 
-              powershell -NoProfile -Command "$pw = (aws ecr get-login-password --region %AWS_REGION%); docker login --username AWS --password $pw %ECR%"
+              echo ==== LOGIN TO ECR ====
+              powershell -NoProfile -Command "$$pw = (aws ecr get-login-password --region %AWS_REGION%); docker login --username AWS --password $$pw %ECR%"
 
+              echo ==== TAG & PUSH IMAGE ====
               docker tag ${localImage} %ECR%/${repo}:${params.APP_TAG}
               docker push %ECR%/${repo}:${params.APP_TAG}
 
@@ -91,8 +101,10 @@ pipeline {
 
             for /f "tokens=1,2 delims==" %%A in (image.env) do set %%A=%%B
 
+            echo ==== UPDATE KUBECONFIG ====
             aws eks update-kubeconfig --region %AWS_REGION% --name %CLUSTER_NAME% --kubeconfig "%KUBECONFIG%"
 
+            echo ==== DEPLOY TO EKS ====
             powershell -NoProfile -Command "(Get-Content k8s\\deployment.yaml) -replace 'IMAGE_PLACEHOLDER','%ECR_IMAGE%' | kubectl apply -f -"
             kubectl apply -f k8s\\service.yaml
 
