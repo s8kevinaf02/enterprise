@@ -25,7 +25,6 @@ pipeline {
           aws --version
           docker version
           kubectl version --client
-          terraform -version
           aws sts get-caller-identity
         """
       }
