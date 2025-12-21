@@ -14,10 +14,28 @@ pipeline {
     string(name: 'APP_TAG', defaultValue: 'app1.1.0', description: 'Docker image tag')
   }
 
+
   stages {
     stage('Checkout') {
       steps { checkout scm }
     }
+
+    stage('AWS creds') {
+        steps {
+            withCredentials([
+            string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+            string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
+    ]) {
+            bat """
+                set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
+                set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
+                set AWS_REGION=%AWS_REGION%
+                aws sts get-caller-identity
+            """
+            }
+        }
+    }
+
 
     stage('Sanity: tools & identity') {
       steps {
