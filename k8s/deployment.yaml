@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: enterprise-web
+  template:
+    metadata:
+      labels:
+        app: enterprise-web
+    spec:
+      containers:
+        - name: web
+          image: IMAGE_PLACEHOLDER
+          ports:
+            - containerPort: 80
