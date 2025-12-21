@@ -4,6 +4,7 @@ pipeline {
   triggers {
     githubPush()
   }
+
   environment {
     AWS_REGION   = "eu-west-2"
     CLUSTER_NAME = "enterprise-eks"
@@ -14,36 +15,17 @@ pipeline {
     string(name: 'APP_TAG', defaultValue: 'app1.1.0', description: 'Docker image tag')
   }
 
-
   stages {
     stage('Checkout') {
       steps { checkout scm }
     }
 
-    stage('AWS creds') {
-        steps {
-            withCredentials([
-            string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
-            string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
-    ]) {
-            bat """
-                set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
-                set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
-                set AWS_REGION=%AWS_REGION%
-                aws sts get-caller-identity
-            """
-            }
-        }
-    }
-
-
-    stage('Sanity: tools & identity') {
+    stage('Sanity: tools') {
       steps {
         bat """
           aws --version
           docker version
           kubectl version --client
-          aws sts get-caller-identity
         """
       }
     }
@@ -53,57 +35,71 @@ pipeline {
         script {
           def repo = "${env.ECR_REPO}".toLowerCase()
           def localImage = "${repo}:${params.APP_TAG}"
-
-          bat """
-            docker build -t ${localImage} .
-          """
+          bat "docker build -t ${localImage} ."
         }
       }
     }
 
     stage('Login & Push to ECR') {
       steps {
-        script {
-          def repo = "${env.ECR_REPO}".toLowerCase()
-          def localImage = "${repo}:${params.APP_TAG}"
+        withCredentials([
+          string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+          string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
+        ]) {
+          script {
+            def repo = "${env.ECR_REPO}".toLowerCase()
+            def localImage = "${repo}:${params.APP_TAG}"
 
-          bat """
-            for /f "delims=" %%A in ('aws sts get-caller-identity --query Account --output text') do set ACCOUNT_ID=%%A
-            set ECR=%ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com
+            bat """
+              set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
+              set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
+              set AWS_REGION=%AWS_REGION%
 
-            aws ecr describe-repositories --repository-names ${repo} --region %AWS_REGION% >nul 2>nul
-            if errorlevel 1 aws ecr create-repository --repository-name ${repo} --region %AWS_REGION%
+              aws sts get-caller-identity
 
-            rem PowerShell-safe ECR login (avoid piping quirks)
-            powershell -NoProfile -Command "$pw = (aws ecr get-login-password --region %AWS_REGION%); docker login --username AWS --password $pw %ECR%"
+              for /f "delims=" %%A in ('aws sts get-caller-identity --query Account --output text') do set ACCOUNT_ID=%%A
+              set ECR=%ACCOUNT_ID%.dkr.ecr.%AWS_REGION%.amazonaws.com
 
-            docker tag ${localImage} %ECR%/${repo}:${params.APP_TAG}
-            docker push %ECR%/${repo}:${params.APP_TAG}
+              aws ecr describe-repositories --repository-names ${repo} --region %AWS_REGION% >nul 2>nul
+              if errorlevel 1 aws ecr create-repository --repository-name ${repo} --region %AWS_REGION%
 
-            echo ECR_IMAGE=%ECR%/${repo}:${params.APP_TAG} > image.env
-          """
+              powershell -NoProfile -Command "$pw = (aws ecr get-login-password --region %AWS_REGION%); docker login --username AWS --password $pw %ECR%"
+
+              docker tag ${localImage} %ECR%/${repo}:${params.APP_TAG}
+              docker push %ECR%/${repo}:${params.APP_TAG}
+
+              echo ECR_IMAGE=%ECR%/${repo}:${params.APP_TAG} > image.env
+            """
+          }
         }
       }
     }
 
     stage('Deploy to EKS') {
       steps {
-        bat """
-          rem Use workspace kubeconfig so Jenkins service account is consistent
-          if not exist "%WORKSPACE%\\.kube" mkdir "%WORKSPACE%\\.kube"
-          set KUBECONFIG=%WORKSPACE%\\.kube\\config
+        withCredentials([
+          string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+          string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
+        ]) {
+          bat """
+            set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
+            set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
+            set AWS_REGION=%AWS_REGION%
 
-          for /f "tokens=1,2 delims==" %%A in (image.env) do set %%A=%%B
+            if not exist "%WORKSPACE%\\.kube" mkdir "%WORKSPACE%\\.kube"
+            set KUBECONFIG=%WORKSPACE%\\.kube\\config
 
-          aws eks update-kubeconfig --region %AWS_REGION% --name %CLUSTER_NAME% --kubeconfig "%KUBECONFIG%"
+            for /f "tokens=1,2 delims==" %%A in (image.env) do set %%A=%%B
 
-          rem Apply manifests: inject image
-          powershell -NoProfile -Command "(Get-Content k8s\\deployment.yaml) -replace 'IMAGE_PLACEHOLDER','%ECR_IMAGE%' | kubectl apply -f -"
-          kubectl apply -f k8s\\service.yaml
+            aws eks update-kubeconfig --region %AWS_REGION% --name %CLUSTER_NAME% --kubeconfig "%KUBECONFIG%"
 
-          kubectl rollout status deployment/enterprise-web
-          kubectl get svc enterprise-web-svc -o wide
-        """
+            powershell -NoProfile -Command "(Get-Content k8s\\deployment.yaml) -replace 'IMAGE_PLACEHOLDER','%ECR_IMAGE%' | kubectl apply -f -"
+            kubectl apply -f k8s\\service.yaml
+
+            kubectl rollout status deployment/enterprise-web
+            kubectl get svc enterprise-web-svc -o wide
+          """
+        }
       }
     }
   }
